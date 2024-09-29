@@ -1,24 +1,23 @@
-using System.Collections.Generic;
+using Game.Manager;
 using Godot;
 
 namespace Game;
 
 public partial class Main : Node
 {
+    private GridManager gridManager;
     private Sprite2D cursor;
     private PackedScene buildingScene;
     private Button placeBuildingButton;
-    private TileMapLayer highlightTileMapLayer;
 
     private Vector2? hoveredGridCell;
-    private HashSet<Vector2> occupiedCells = new();
 
     public override void _Ready()
     {
         cursor = GetNode<Sprite2D>("Cursor");
+        gridManager = GetNode<GridManager>("GridManager");
         buildingScene = GD.Load<PackedScene>("res://scenes/building/Building.tscn");
         placeBuildingButton = GetNode<Button>("PlaceBuildingButton");
-        highlightTileMapLayer = GetNode<TileMapLayer>("HighlightTileMapLayer");
 
         cursor.Visible = false;
 
@@ -31,7 +30,7 @@ public partial class Main : Node
             hoveredGridCell.HasValue
             && evt.IsActionPressed("left_click")
             && cursor.Visible
-            && !occupiedCells.Contains(hoveredGridCell.Value)
+            && gridManager.IsTilePositionValid(hoveredGridCell.Value)
         )
         {
             PlaceBuildingAtHoveredCellPosition();
@@ -41,18 +40,13 @@ public partial class Main : Node
 
     public override void _Process(double delta)
     {
-        var gridPosition = GetMouseGridCellPosition();
+        var gridPosition = gridManager.GetMouseGridCellPosition();
         cursor.GlobalPosition = gridPosition * 64;
         if (cursor.Visible && (!hoveredGridCell.HasValue || hoveredGridCell.Value != gridPosition))
         {
             hoveredGridCell = gridPosition;
-            UpdateHighlightTileMapLayer();
+            gridManager.HighlightValidTilesInRadius(hoveredGridCell.Value, 3);
         }
-    }
-
-    private Vector2 GetMouseGridCellPosition()
-    {
-        return (highlightTileMapLayer.GetGlobalMousePosition() / 64).Floor();
     }
 
     private void PlaceBuildingAtHoveredCellPosition()
@@ -63,26 +57,9 @@ public partial class Main : Node
         AddChild(building);
 
         building.GlobalPosition = hoveredGridCell.Value * 64;
-        occupiedCells.Add(hoveredGridCell.Value);
+        gridManager.MarkTileAsOccupied(hoveredGridCell.Value);
         hoveredGridCell = null;
-        UpdateHighlightTileMapLayer();
-    }
-
-    private void UpdateHighlightTileMapLayer()
-    {
-        highlightTileMapLayer.Clear();
-        if (!hoveredGridCell.HasValue)
-        {
-            return;
-        }
-
-        for (var x = hoveredGridCell.Value.X - 3; x <= hoveredGridCell.Value.X + 3; x++)
-        {
-            for (var y = hoveredGridCell.Value.Y - 3; y <= hoveredGridCell.Value.Y + 3; y++)
-            {
-                highlightTileMapLayer.SetCell(new Vector2I((int)x, (int)y), 1, Vector2I.Zero);
-            }
-        }
+        gridManager.ClearHighlightedTiles();
     }
 
     private void OnButtonPressed()
