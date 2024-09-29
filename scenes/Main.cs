@@ -30,7 +30,7 @@ public partial class Main : Node
             hoveredGridCell.HasValue
             && evt.IsActionPressed("left_click")
             && cursor.Visible
-            && gridManager.IsTilePositionValid(hoveredGridCell.Value)
+            && gridManager.IsTilePositionBuildable(hoveredGridCell.Value)
         )
         {
             PlaceBuildingAtHoveredCellPosition();
@@ -57,7 +57,6 @@ public partial class Main : Node
         AddChild(building);
 
         building.GlobalPosition = hoveredGridCell.Value * 64;
-        gridManager.MarkTileAsOccupied(hoveredGridCell.Value);
         hoveredGridCell = null;
         gridManager.ClearHighlightedTiles();
     }
