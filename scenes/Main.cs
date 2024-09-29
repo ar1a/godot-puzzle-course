@@ -1,5 +1,6 @@
 using System;
 using Game.Manager;
+using Game.Resources.Building;
 using Godot;
 
 namespace Game;
@@ -8,28 +9,28 @@ public partial class Main : Node
 {
     private GridManager gridManager;
     private Sprite2D cursor;
-    private PackedScene towerScene;
-    private PackedScene villageScene;
+    private BuildingResource towerResource;
+    private BuildingResource villageResource;
     private Button placeTowerButton;
     private Button placeVillageButton;
     private Node2D ySortRoot;
 
     private Vector2I? hoveredGridCell;
-    private PackedScene toPlaceBuildingScene;
+    private BuildingResource toPlaceBuildingResource;
 
     public override void _Ready()
     {
         cursor = GetNode<Sprite2D>("Cursor");
         gridManager = GetNode<GridManager>("GridManager");
-        towerScene = GD.Load<PackedScene>("res://scenes/building/Tower.tscn");
-        villageScene = GD.Load<PackedScene>("res://scenes/building/Village.tscn");
+        towerResource = GD.Load<BuildingResource>("res://resources/building/tower.tres");
+        villageResource = GD.Load<BuildingResource>("res://resources/building/village.tres");
         placeTowerButton = GetNode<Button>("PlaceTowerButton");
         placeVillageButton = GetNode<Button>("PlaceVillageButton");
         ySortRoot = GetNode<Node2D>("YSortRoot");
 
         cursor.Visible = false;
 
-        placeTowerButton.Pressed += OnPlaceBuildingButtonPressed;
+        placeTowerButton.Pressed += OnPlaceTowerButtonPressed;
         placeVillageButton.Pressed += OnPlaceVillageButtonPressed;
     }
 
@@ -51,10 +52,17 @@ public partial class Main : Node
     {
         var gridPosition = gridManager.GetMouseGridCellPosition();
         cursor.GlobalPosition = gridPosition * 64;
-        if (cursor.Visible && (!hoveredGridCell.HasValue || hoveredGridCell.Value != gridPosition))
+        if (
+            toPlaceBuildingResource != null
+            && cursor.Visible
+            && (!hoveredGridCell.HasValue || hoveredGridCell.Value != gridPosition)
+        )
         {
             hoveredGridCell = gridPosition;
-            gridManager.HighlightExpandedBuildableTiles(hoveredGridCell.Value, 3);
+            gridManager.HighlightExpandedBuildableTiles(
+                hoveredGridCell.Value,
+                toPlaceBuildingResource.BuildableRadius
+            );
         }
     }
 
@@ -62,7 +70,7 @@ public partial class Main : Node
     {
         if (!hoveredGridCell.HasValue)
             return;
-        var building = toPlaceBuildingScene.Instantiate<Node2D>();
+        var building = toPlaceBuildingResource.BuildingScene.Instantiate<Node2D>();
         ySortRoot.AddChild(building);
 
         building.GlobalPosition = hoveredGridCell.Value * 64;
@@ -70,17 +78,17 @@ public partial class Main : Node
         gridManager.ClearHighlightedTiles();
     }
 
-    private void OnPlaceBuildingButtonPressed()
+    private void OnPlaceTowerButtonPressed()
     {
         cursor.Visible = true;
         gridManager.HighlightBuildableTiles();
-        toPlaceBuildingScene = towerScene;
+        toPlaceBuildingResource = towerResource;
     }
 
     private void OnPlaceVillageButtonPressed()
     {
         cursor.Visible = true;
         gridManager.HighlightBuildableTiles();
-        toPlaceBuildingScene = villageScene;
+        toPlaceBuildingResource = villageResource;
     }
 }

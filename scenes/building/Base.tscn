@@ -16,4 +16,4 @@ centered = false
 offset = Vector2(-32, -32)
 
 [node name="BuildingComponent" parent="." instance=ExtResource("1_ja8lo")]
-BuildableRadius = 2
+buildingResourcePath = "res://resources/building/base.tres"
