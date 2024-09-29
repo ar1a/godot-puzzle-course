@@ -45,7 +45,7 @@ public partial class Main : Node
         if (cursor.Visible && (!hoveredGridCell.HasValue || hoveredGridCell.Value != gridPosition))
         {
             hoveredGridCell = gridPosition;
-            gridManager.HighlightValidTilesInRadius(hoveredGridCell.Value, 3);
+            gridManager.HighlightBuildableTiles();
         }
     }
 
