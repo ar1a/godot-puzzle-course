@@ -14,6 +14,7 @@ texture_region_size = Vector2i(192, 192)
 0:0/animation_frame_3/duration = 0.15
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, 64)
+0:0/0/custom_data_1 = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4r88g"]
 texture = ExtResource("1_wk7hy")
@@ -154,7 +155,9 @@ tile_size = Vector2i(64, 64)
 terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "sand"
 terrain_set_0/terrain_0/color = Color(0.233183, 0.853109, 0, 1)
-custom_data_layer_0/name = "buildable"
+custom_data_layer_0/name = "is_buildable"
 custom_data_layer_0/type = 1
+custom_data_layer_1/name = "is_wood"
+custom_data_layer_1/type = 1
 sources/1 = SubResource("TileSetAtlasSource_4r88g")
 sources/0 = SubResource("TileSetAtlasSource_s4qs1")
