@@ -6,10 +6,14 @@
 size = Vector2(64, 64)
 
 [node name="Base" type="Node2D"]
+y_sort_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+position = Vector2(32, 32)
 texture = SubResource("PlaceholderTexture2D_ton68")
 centered = false
+offset = Vector2(-32, -32)
 
 [node name="BuildingComponent" parent="." instance=ExtResource("1_ja8lo")]
 BuildableRadius = 2
