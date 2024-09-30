@@ -10,6 +10,7 @@ namespace Game.Manager;
 public partial class GridManager : Node
 {
     private const string IS_BUILDABLE = "is_buildable";
+    private const string IS_IGNORED = "is_ignored";
     private const string IS_WOOD = "is_wood";
 
     [Signal]
@@ -42,7 +43,7 @@ public partial class GridManager : Node
         foreach (var layer in allTilemapLayers)
         {
             var customData = layer.GetCellTileData(tilePosition);
-            if (customData == null)
+            if (customData == null || (bool)customData.GetCustomData(IS_IGNORED))
                 continue;
             return (bool)customData.GetCustomData(dataName);
         }

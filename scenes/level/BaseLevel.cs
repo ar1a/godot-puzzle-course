@@ -8,6 +8,7 @@ public partial class BaseLevel : Node
     private GridManager gridManager;
     private GoldMine goldMine;
     private GameCamera gameCamera;
+    private Node2D baseBuilding;
     private TileMapLayer baseTerrainTilemapLayer;
 
     public override void _Ready()
@@ -16,8 +17,10 @@ public partial class BaseLevel : Node
         goldMine = GetNode<GoldMine>("%GoldMine");
         gameCamera = GetNode<GameCamera>("GameCamera");
         baseTerrainTilemapLayer = GetNode<TileMapLayer>("%BaseTerrainTileMapLayer");
+        baseBuilding = GetNode<Node2D>("%Base");
 
         gameCamera.SetBoundingRect(baseTerrainTilemapLayer.GetUsedRect());
+        gameCamera.CenterOnPosition(baseBuilding.GlobalPosition);
 
         gridManager.GridStateUpdated += OnGridStateUpdated;
     }

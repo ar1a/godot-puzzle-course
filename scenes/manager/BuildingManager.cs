@@ -25,6 +25,9 @@ public partial class BuildingManager : Node
     [Export]
     private PackedScene buildingGhostScene;
 
+    [Export]
+    private int startingResourceCount = 4;
+
     private enum State
     {
         Normal,
@@ -32,7 +35,6 @@ public partial class BuildingManager : Node
     }
 
     private int currentResourceCount;
-    private int startingResourceCount = 4;
     private int currentlyUsedResourceCount;
     private BuildingResource toPlaceBuildingResource;
     private Vector2I hoveredGridCell;
