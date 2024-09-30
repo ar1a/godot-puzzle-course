@@ -19,4 +19,7 @@ public partial class BuildingResource : Resource
 
     [Export]
     public PackedScene BuildingScene { get; private set; }
+
+    [Export]
+    public PackedScene SpriteScene { get; private set; }
 }
