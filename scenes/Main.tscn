@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=4 uid="uid://bd6mansuv4861"]
+[gd_scene load_steps=11 format=4 uid="uid://bd6mansuv4861"]
 
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_mj8s0"]
 [ext_resource type="TileSet" uid="uid://b2476ejttd301" path="res://resources/highlight_tileset.tres" id="2_6kjr0"]
 [ext_resource type="TileSet" uid="uid://txcxlotyc02t" path="res://resources/tiles.tres" id="2_sfw0m"]
+[ext_resource type="PackedScene" uid="uid://by48n5fnmvuji" path="res://scenes/manager/BuildingManager.tscn" id="3_i1bd0"]
 [ext_resource type="PackedScene" uid="uid://dwdcbocoifx51" path="res://scenes/manager/GridManager.tscn" id="4_y16yb"]
 [ext_resource type="PackedScene" uid="uid://b0e7h08776eb4" path="res://scenes/building/Base.tscn" id="5_g8bdq"]
 [ext_resource type="PackedScene" uid="uid://cn2ejisugfviy" path="res://scenes/ui/GameUI.tscn" id="6_pmdvr"]
@@ -19,6 +20,12 @@ script = ExtResource("1_mj8s0")
 highlightTilemapLayer = NodePath("../HighlightTileMapLayer")
 baseTerrainTilemapLayer = NodePath("../YSortRoot/BaseTerrainTileMapLayer")
 
+[node name="BuildingManager" parent="." node_paths=PackedStringArray("gridManager", "gameUI", "ySortRoot", "cursor") instance=ExtResource("3_i1bd0")]
+gridManager = NodePath("../GridManager")
+gameUI = NodePath("../GameUI")
+ySortRoot = NodePath("../YSortRoot")
+cursor = NodePath("../Cursor")
+
 [node name="YSortRoot" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -29,7 +36,7 @@ tile_set = ExtResource("2_sfw0m")
 
 [node name="ResourceTileMapLayer" type="TileMapLayer" parent="YSortRoot/BaseTerrainTileMapLayer"]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAHAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAMAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAANAAcAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAHAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAMAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAANAAcAAAAAAAAAAAAIAAIAAAAAAAAAAAA=")
 tile_set = ExtResource("2_sfw0m")
 
 [node name="Base" parent="YSortRoot/BaseTerrainTileMapLayer" instance=ExtResource("5_g8bdq")]

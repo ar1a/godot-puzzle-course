@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_3bxq5")
 DisplayName = "Tower"
+ResourceCost = 4
 BuildableRadius = 3
 ResourceRadius = 0
 BuildingScene = ExtResource("1_4m7of")
