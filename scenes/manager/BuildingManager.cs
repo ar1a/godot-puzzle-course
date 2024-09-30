@@ -160,7 +160,7 @@ public partial class BuildingManager : Node
             .Cast<BuildingComponent>()
             .FirstOrDefault(
                 (buildingComponent) =>
-                    buildingComponent.GetGridCellPosition() == hoveredGridArea.Position
+                    buildingComponent.IsTileInBuildingArea(hoveredGridArea.Position)
                     && buildingComponent.BuildingResource.IsDeletable
             );
         if (buildingComponent == null)
