@@ -3,7 +3,7 @@ using Godot;
 
 namespace Game.UI;
 
-public partial class GameUI : MarginContainer
+public partial class GameUI : CanvasLayer
 {
     [Signal]
     public delegate void BuildingResourceSelectedEventHandler(BuildingResource buildingResource);
