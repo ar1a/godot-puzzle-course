@@ -1,3 +1,4 @@
+using Game.Building;
 using Game.Resources.Building;
 using Game.UI;
 using Godot;
@@ -23,7 +24,7 @@ public partial class BuildingManager : Node
     private int currentlyUsedResourceCount;
     private BuildingResource toPlaceBuildingResource;
     private Vector2I? hoveredGridCell;
-    private Node2D buildingGhost;
+    private BuildingGhost buildingGhost;
 
     private int AvailableResourceCount =>
         startingResourceCount + currentResourceCount - currentlyUsedResourceCount;
@@ -40,12 +41,17 @@ public partial class BuildingManager : Node
             hoveredGridCell.HasValue
             && toPlaceBuildingResource != null
             && evt.IsActionPressed("left_click")
-            && gridManager.IsTilePositionBuildable(hoveredGridCell.Value)
-            && AvailableResourceCount >= toPlaceBuildingResource.ResourceCost
+            && IsBuildingPlaceableAtTile(hoveredGridCell.Value)
         )
         {
             PlaceBuildingAtHoveredCellPosition();
         }
+    }
+
+    public bool IsBuildingPlaceableAtTile(Vector2I tilePosition)
+    {
+        return gridManager.IsTilePositionBuildable(tilePosition)
+            && AvailableResourceCount >= toPlaceBuildingResource.ResourceCost;
     }
 
     public override void _Process(double delta)
@@ -60,7 +66,18 @@ public partial class BuildingManager : Node
         )
         {
             hoveredGridCell = gridPosition;
-            gridManager.ClearHighlightedTiles();
+            UpdateGridDisplay();
+        }
+    }
+
+    public void UpdateGridDisplay()
+    {
+        if (hoveredGridCell == null)
+            return;
+        gridManager.ClearHighlightedTiles();
+        gridManager.HighlightBuildableTiles();
+        if (IsBuildingPlaceableAtTile(hoveredGridCell.Value))
+        {
             gridManager.HighlightExpandedBuildableTiles(
                 hoveredGridCell.Value,
                 toPlaceBuildingResource.BuildableRadius
@@ -69,6 +86,11 @@ public partial class BuildingManager : Node
                 hoveredGridCell.Value,
                 toPlaceBuildingResource.ResourceRadius
             );
+            buildingGhost.SetValid();
+        }
+        else
+        {
+            buildingGhost.SetInvalid();
         }
     }
 
@@ -97,12 +119,12 @@ public partial class BuildingManager : Node
     {
         if (IsInstanceValid(buildingGhost))
             buildingGhost.QueueFree();
-        buildingGhost = buildingGhostScene.Instantiate<Node2D>();
+        buildingGhost = buildingGhostScene.Instantiate<BuildingGhost>();
         ySortRoot.AddChild(buildingGhost);
 
         var buildingSprite = buildingResource.SpriteScene.Instantiate<Sprite2D>();
         buildingGhost.AddChild(buildingSprite);
-        gridManager.HighlightBuildableTiles();
         toPlaceBuildingResource = buildingResource;
+        UpdateGridDisplay();
     }
 }
