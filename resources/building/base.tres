@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_ccreb")
+DisplayName = "Base"
 BuildableRadius = 3
 ResourceRadius = 0
 BuildingScene = ExtResource("1_ei3r1")

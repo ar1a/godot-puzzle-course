@@ -15,16 +15,7 @@ theme_override_constants/margin_bottom = 16
 script = ExtResource("1_l8rxl")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
-
-[node name="PlaceTowerButton" type="Button" parent="HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Place Tower"
-
-[node name="PlaceVillageButton" type="Button" parent="HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Place Village"
