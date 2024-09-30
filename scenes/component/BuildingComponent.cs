@@ -25,4 +25,10 @@ public partial class BuildingComponent : Node2D
     {
         return (Vector2I)(GlobalPosition / 64).Floor();
     }
+
+    public void Destroy()
+    {
+        GameEvents.EmitBuildingDestroyed(this);
+        Owner.QueueFree();
+    }
 }
