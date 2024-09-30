@@ -161,6 +161,7 @@ public partial class BuildingManager : Node
             .FirstOrDefault(
                 (buildingComponent) =>
                     buildingComponent.GetGridCellPosition() == hoveredGridArea.Position
+                    && buildingComponent.BuildingResource.IsDeletable
             );
         if (buildingComponent == null)
             return;
