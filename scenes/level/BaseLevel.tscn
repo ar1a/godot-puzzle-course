@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://bd6mansuv4861"]
+[gd_scene load_steps=13 format=3 uid="uid://bd6mansuv4861"]
 
 [ext_resource type="Script" path="res://scenes/level/BaseLevel.cs" id="1_mj8s0"]
 [ext_resource type="TileSet" uid="uid://b2476ejttd301" path="res://resources/highlight_tileset.tres" id="2_6kjr0"]
 [ext_resource type="TileSet" uid="uid://txcxlotyc02t" path="res://resources/tiles.tres" id="2_sfw0m"]
 [ext_resource type="PackedScene" uid="uid://by48n5fnmvuji" path="res://scenes/manager/BuildingManager.tscn" id="3_i1bd0"]
 [ext_resource type="PackedScene" uid="uid://dwdcbocoifx51" path="res://scenes/manager/GridManager.tscn" id="4_y16yb"]
+[ext_resource type="PackedScene" uid="uid://c6o6fmxol0rej" path="res://scenes/GameCamera.tscn" id="5_2pjeb"]
 [ext_resource type="PackedScene" uid="uid://b0e7h08776eb4" path="res://scenes/building/Base.tscn" id="5_g8bdq"]
 [ext_resource type="PackedScene" uid="uid://cn2ejisugfviy" path="res://scenes/ui/GameUI.tscn" id="6_pmdvr"]
 [ext_resource type="Resource" uid="uid://2irvtramblpr" path="res://resources/building/tower.tres" id="7_go543"]
@@ -25,10 +26,13 @@ gameUI = NodePath("../GameUI")
 ySortRoot = NodePath("../YSortRoot")
 buildingGhostScene = ExtResource("10_da74v")
 
+[node name="GameCamera" parent="." instance=ExtResource("5_2pjeb")]
+
 [node name="YSortRoot" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="BaseTerrainTileMapLayer" type="TileMapLayer" parent="YSortRoot"]
+unique_name_in_owner = true
 y_sort_enabled = true
 tile_set = ExtResource("2_sfw0m")
 
