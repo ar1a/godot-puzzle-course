@@ -24,7 +24,7 @@ layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0.619608, 0.529412, 0.462745, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Village"
 horizontal_alignment = 1
 

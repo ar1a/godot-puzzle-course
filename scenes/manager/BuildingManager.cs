@@ -14,6 +14,9 @@ public partial class BuildingManager : Node
     private readonly StringName ACTION_CANCEL = "cancel";
     private readonly StringName ACTION_RIGHT_CLICK = "right_click";
 
+    [Signal]
+    public delegate void AvailableResourceCountChangedEventHandler(int newResourceCount);
+
     [Export]
     private GridManager gridManager;
 
@@ -49,6 +52,11 @@ public partial class BuildingManager : Node
     {
         gridManager.ResourceTilesUpdated += OnResourceTilesUpdated;
         gameUI.BuildingResourceSelected += OnBuildingResourseSelected;
+        Callable
+            .From(
+                () => EmitSignal(SignalName.AvailableResourceCountChanged, AvailableResourceCount)
+            )
+            .CallDeferred();
     }
 
     public override void _UnhandledInput(InputEvent evt)
@@ -135,6 +143,7 @@ public partial class BuildingManager : Node
         building.GlobalPosition = hoveredGridArea.Position * 64;
         currentlyUsedResourceCount += toPlaceBuildingResource.ResourceCost;
         ChangeState(State.Normal);
+        EmitSignal(SignalName.AvailableResourceCountChanged, AvailableResourceCount);
     }
 
     private void DestroyBuildAtHoveredCellPosition()
@@ -152,6 +161,7 @@ public partial class BuildingManager : Node
 
         currentlyUsedResourceCount -= buildingComponent.BuildingResource.ResourceCost;
         buildingComponent.Destroy();
+        EmitSignal(SignalName.AvailableResourceCountChanged, AvailableResourceCount);
     }
 
     public void ClearBuildingGhost()
@@ -177,6 +187,7 @@ public partial class BuildingManager : Node
     private void OnResourceTilesUpdated(int resourceCount)
     {
         currentResourceCount = resourceCount;
+        EmitSignal(SignalName.AvailableResourceCountChanged, AvailableResourceCount);
     }
 
     private void ChangeState(State toState)
