@@ -17,4 +17,10 @@ public static class Rect2IExtensions
         }
         return tiles;
     }
+
+    public static Rect2 ToRect2F(this Rect2I rect)
+    {
+        // implicit cast to Rect2
+        return rect;
+    }
 }
