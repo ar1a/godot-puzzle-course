@@ -1,8 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://cn2ejisugfviy"]
+[gd_scene load_steps=8 format=3 uid="uid://cn2ejisugfviy"]
 
 [ext_resource type="Script" path="res://scenes/ui/GameUI.cs" id="1_l8rxl"]
 [ext_resource type="Resource" uid="uid://2irvtramblpr" path="res://resources/building/tower.tres" id="2_jkjdi"]
 [ext_resource type="Resource" uid="uid://bmnm1a36vslf5" path="res://resources/building/village.tres" id="3_fb2nv"]
+[ext_resource type="Texture2D" uid="uid://6ly4lnbruk14" path="res://assets/ui/banner_vertical.png" id="4_7k0vu"]
+[ext_resource type="Texture2D" uid="uid://4xwnhmwut5df" path="res://assets/ui/carved_nine_slides.png" id="5_uy82h"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7g6w0"]
+texture = ExtResource("4_7k0vu")
+texture_margin_left = 32.0
+texture_margin_top = 40.0
+texture_margin_right = 32.0
+texture_margin_bottom = 40.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(32, 24, 128, 144)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_75lnw"]
+texture = ExtResource("5_uy82h")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
 
 [node name="GameUI" type="CanvasLayer"]
 script = ExtResource("1_l8rxl")
@@ -19,8 +38,18 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-unique_name_in_owner = true
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = 16
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_7g6w0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="BuildingButton" type="PanelContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_75lnw")
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/BuildingButton"]
+layout_mode = 2
+text = "Place Holder"
