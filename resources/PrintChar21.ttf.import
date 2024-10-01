@@ -1,0 +1,39 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://db0kuhh2valf4"
+path="res://.godot/imported/PrintChar21.ttf-06a2a116d8d0508d1b9a79d720575aa9.fontdata"
+
+[deps]
+
+source_file="res://resources/PrintChar21.ttf"
+dest_files=["res://.godot/imported/PrintChar21.ttf-06a2a116d8d0508d1b9a79d720575aa9.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=0
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=0
+subpixel_positioning=4
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0)
+}]
+language_support={}
+script_support={}
+opentype_features={}
