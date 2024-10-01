@@ -1,0 +1,28 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://kal05wou0ff6"]
+
+[ext_resource type="Texture2D" uid="uid://6ly4lnbruk14" path="res://assets/ui/banner_vertical.png" id="1_jdwmk"]
+[ext_resource type="Texture2D" uid="uid://4xwnhmwut5df" path="res://assets/ui/carved_nine_slides.png" id="2_aotr0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7g6w0"]
+texture = ExtResource("1_jdwmk")
+texture_margin_left = 32.0
+texture_margin_top = 40.0
+texture_margin_right = 32.0
+texture_margin_bottom = 40.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(32, 24, 128, 144)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_75lnw"]
+texture = ExtResource("2_aotr0")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[resource]
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_7g6w0")
+PanelContainerAlternate/base_type = &"PanelContainer"
+PanelContainerAlternate/styles/panel = SubResource("StyleBoxTexture_75lnw")

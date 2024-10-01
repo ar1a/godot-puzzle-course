@@ -33,6 +33,10 @@ project/assembly_name="puzzle course"
 
 naming/scene_name_casing=1
 
+[gui]
+
+theme/custom="res://resources/theme.tres"
+
 [input]
 
 left_click={
