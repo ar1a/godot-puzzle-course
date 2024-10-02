@@ -35,8 +35,14 @@ public partial class GridManager : Node
 
     public override void _Ready()
     {
-        GameEvents.Instance.BuildingPlaced += OnBuildingPlaced;
-        GameEvents.Instance.BuildingDestroyed += OnBuildingDestroyed;
+        GameEvents.Instance.Connect(
+            GameEvents.SignalName.BuildingPlaced,
+            Callable.From<BuildingComponent>(OnBuildingPlaced)
+        );
+        GameEvents.Instance.Connect(
+            GameEvents.SignalName.BuildingDestroyed,
+            Callable.From<BuildingComponent>(OnBuildingDestroyed)
+        );
         allTilemapLayers = GetAllTilemapLayers(baseTerrainTilemapLayer);
         MapTileMapLayersToElevationLayers();
     }
