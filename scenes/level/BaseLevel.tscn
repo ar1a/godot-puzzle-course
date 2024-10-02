@@ -17,7 +17,7 @@ script = ExtResource("1_mj8s0")
 levelCompleteScene = ExtResource("2_lbyb1")
 
 [node name="GridManager" parent="." node_paths=PackedStringArray("highlightTilemapLayer", "baseTerrainTilemapLayer") instance=ExtResource("4_y16yb")]
-highlightTilemapLayer = NodePath("../HighlightTileMapLayer")
+highlightTilemapLayer = NodePath("../YSortRoot/HighlightTileMapLayer")
 baseTerrainTilemapLayer = NodePath("../YSortRoot/BaseTerrainTileMapLayer")
 
 [node name="BuildingManager" parent="." node_paths=PackedStringArray("gridManager", "gameUI", "ySortRoot") instance=ExtResource("3_i1bd0")]
@@ -49,6 +49,7 @@ unique_name_in_owner = true
 [node name="GoldMine" parent="YSortRoot" instance=ExtResource("7_jwstj")]
 unique_name_in_owner = true
 
-[node name="HighlightTileMapLayer" type="TileMapLayer" parent="."]
+[node name="HighlightTileMapLayer" type="TileMapLayer" parent="YSortRoot"]
 modulate = Color(1, 1, 1, 0.486275)
+y_sort_enabled = true
 tile_set = ExtResource("2_6kjr0")
