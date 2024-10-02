@@ -11,7 +11,6 @@ public partial class BuildingAnimatorComponent : Node2D
     public override void _Ready()
     {
         SetupNodes();
-        PlayInAnimation();
     }
 
     public void PlayInAnimation()
