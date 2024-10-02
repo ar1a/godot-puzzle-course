@@ -29,9 +29,6 @@ public partial class BuildingManager : Node
     [Export]
     private PackedScene buildingGhostScene;
 
-    [Export]
-    private int startingResourceCount = 4;
-
     private enum State
     {
         Normal,
@@ -44,6 +41,7 @@ public partial class BuildingManager : Node
     private Rect2I hoveredGridArea = new(Vector2I.Zero, Vector2I.One);
     private BuildingGhost buildingGhost;
     private State currentState = State.Normal;
+    private int startingResourceCount = 0;
 
     private int AvailableResourceCount =>
         startingResourceCount + currentResourceCount - currentlyUsedResourceCount;
@@ -92,6 +90,11 @@ public partial class BuildingManager : Node
     {
         var allTilesBuildable = gridManager.IsTileAreaBuildable(tileArea);
         return allTilesBuildable && AvailableResourceCount >= toPlaceBuildingResource.ResourceCost;
+    }
+
+    public void SetStartingResourceCount(int count)
+    {
+        startingResourceCount = count;
     }
 
     public override void _Process(double delta)
