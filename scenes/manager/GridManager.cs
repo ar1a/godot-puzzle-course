@@ -88,9 +88,7 @@ public partial class GridManager : Node
                     IS_BUILDABLE
                 );
                 var elevationLayer =
-                    firstTileMapLayer != null
-                        ? tileMapLayerToElevationLayer[firstTileMapLayer]
-                        : null;
+                    tileMapLayer != null ? tileMapLayerToElevationLayer[tileMapLayer] : null;
                 return isBuildable
                     && validBuildableTiles.Contains(tilePosition)
                     && elevationLayer == targetElevationLayer;
