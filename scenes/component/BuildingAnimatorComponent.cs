@@ -50,6 +50,9 @@ public partial class BuildingAnimatorComponent : Node2D
         if (activeTween != null && activeTween.IsValid())
             activeTween.Kill();
 
+        // snap to zero if destroyed during placing animation
+        animationRootNode.Position = Vector2.Zero;
+
         maskNode.ClipChildren = ClipChildrenMode.Only;
         maskNode.Texture = maskTexture;
 

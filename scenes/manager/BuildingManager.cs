@@ -161,9 +161,8 @@ public partial class BuildingManager : Node
 
     private void DestroyBuildAtHoveredCellPosition()
     {
-        var buildingComponent = GetTree()
-            .GetNodesInGroup(nameof(BuildingComponent))
-            .Cast<BuildingComponent>()
+        var buildingComponent = BuildingComponent
+            .GetValidBuildingComponents(this)
             .FirstOrDefault(
                 (buildingComponent) =>
                     buildingComponent.IsTileInBuildingArea(hoveredGridArea.Position)
