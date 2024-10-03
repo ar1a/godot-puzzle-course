@@ -27,6 +27,9 @@ public partial class BuildingResource : Resource
     public int ResourceRadius { get; private set; }
 
     [Export]
+    public int DangerRadius { get; private set; }
+
+    [Export]
     public PackedScene BuildingScene { get; private set; }
 
     [Export]

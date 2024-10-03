@@ -23,6 +23,7 @@ public partial class BuildingAnimatorComponent : Node2D
 
     public override void _Ready()
     {
+        YSortEnabled = false;
         SetupNodes();
     }
 
@@ -97,7 +98,11 @@ public partial class BuildingAnimatorComponent : Node2D
         RemoveChild(spriteNode);
         Position = spriteNode.Position;
 
-        maskNode = new Sprite2D { Centered = false, Offset = new Vector2(-160, -256) };
+        maskNode = new Sprite2D
+        {
+            Centered = false,
+            Offset = new Vector2(-maskTexture.GetSize().X / 2, -maskTexture.GetSize().Y),
+        };
         AddChild(maskNode);
 
         animationRootNode = new Node2D();

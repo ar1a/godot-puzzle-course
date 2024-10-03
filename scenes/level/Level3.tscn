@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=4 uid="uid://b5rnwtd58ypa5"]
+[gd_scene load_steps=6 format=4 uid="uid://b5rnwtd58ypa5"]
 
 [ext_resource type="PackedScene" uid="uid://bd6mansuv4861" path="res://scenes/level/BaseLevel.tscn" id="1_ihsul"]
 [ext_resource type="Resource" uid="uid://clvbdtdrng7os" path="res://resources/level/level_03.tres" id="2_4lff4"]
 [ext_resource type="PackedScene" uid="uid://drych0iucvapa" path="res://scenes/level/util/ElevationLayer.tscn" id="2_v50qf"]
 [ext_resource type="TileSet" uid="uid://txcxlotyc02t" path="res://resources/tiles.tres" id="3_ictaq"]
+[ext_resource type="PackedScene" uid="uid://vjk38dv70v58" path="res://scenes/building/GoblinCamp.tscn" id="5_o0rsf"]
 
 [node name="Level3" instance=ExtResource("1_ihsul")]
 levelDefinitionResource = ExtResource("2_4lff4")
@@ -32,7 +33,7 @@ tile_set = ExtResource("3_ictaq")
 
 [node name="TreeLayer" type="TileMapLayer" parent="YSortRoot/BaseTerrainTileMapLayer" index="2"]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAIAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAATAAIAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAcAAAAAAAAAAAAFAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAQAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAD7/xAAAAAAAAAAAAD7/w8AAAAAAAAAAAD8/w0AAAAAAAAAAAAWAAkAAAAAAAAAAAAXAAkAAAAAAAAAAAAXAAgAAAAAAAAAAAAYAAgAAAAAAAAAAAAYAAcAAAAAAAAAAAAYAAkAAAAAAAAAAAAVAAkAAAAAAAAAAAAUAAkAAAAAAAAAAAAWAAcAAAAAAAAAAAD8/xEAAAAAAAAAAAD9/xEAAAAAAAAAAAD+/xEAAAAAAAAAAAD8/xAAAAAAAAAAAAABABEAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAIAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAATAAIAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAcAAAAAAAAAAAAFAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAQAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAD7/xAAAAAAAAAAAAD7/w8AAAAAAAAAAAD8/w0AAAAAAAAAAAAWAAkAAAAAAAAAAAAXAAkAAAAAAAAAAAAXAAgAAAAAAAAAAAAYAAgAAAAAAAAAAAAYAAcAAAAAAAAAAAAYAAkAAAAAAAAAAAAVAAkAAAAAAAAAAAAUAAkAAAAAAAAAAAAWAAcAAAAAAAAAAAD8/xEAAAAAAAAAAAD9/xEAAAAAAAAAAAD+/xEAAAAAAAAAAAD8/xAAAAAAAAAAAAABABEAAAAAAAAAAAAFAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAFAAcAAAAAAAAAAAALAAMAAAAAAAAAAAAAAAwAAAAAAAAAAAA=")
 tile_set = ExtResource("3_ictaq")
 
 [node name="Base" parent="YSortRoot" index="1"]
@@ -40,5 +41,8 @@ position = Vector2(1216, 192)
 
 [node name="GoldMine" parent="YSortRoot" index="2"]
 position = Vector2(0, 896)
+
+[node name="GoblinCamp" parent="YSortRoot" index="4" instance=ExtResource("5_o0rsf")]
+position = Vector2(576, 256)
 
 [editable path="YSortRoot/BaseTerrainTileMapLayer/ElevationLayer"]
