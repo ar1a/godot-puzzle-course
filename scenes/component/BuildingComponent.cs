@@ -27,6 +27,11 @@ public partial class BuildingComponent : Node2D
             .Where(x => !x.IsDestroying);
     }
 
+    public static IEnumerable<BuildingComponent> GetDangerBuildingComponents(Node node)
+    {
+        return GetValidBuildingComponents(node).Where(x => x.BuildingResource.IsDangerBuilding());
+    }
+
     public override void _Ready()
     {
         if (buildingResourcePath != null)
@@ -39,6 +44,12 @@ public partial class BuildingComponent : Node2D
         }
         AddToGroup(nameof(BuildingComponent));
         Callable.From(Initialize).CallDeferred();
+    }
+
+    public Rect2I GetTileArea()
+    {
+        var rootCell = GetGridCellPosition();
+        return new Rect2I(rootCell, BuildingResource.Dimensions);
     }
 
     public Vector2I GetGridCellPosition()
