@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_wn30t")
 Id = "56e742a9-a893-45e3-92dc-e15356858e76"
-StartingResourceCount = 4
+StartingResourceCount = 100
 LevelScenePath = "res://scenes/level/Level3.tscn"

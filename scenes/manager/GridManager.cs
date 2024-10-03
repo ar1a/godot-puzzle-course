@@ -21,6 +21,7 @@ public partial class GridManager : Node
     public delegate void GridStateUpdatedEventHandler();
 
     private HashSet<Vector2I> validBuildableTiles = new();
+    private HashSet<Vector2I> validAttackTiles = new();
     private HashSet<Vector2I> allTilesInBuildingRadius = new();
     private HashSet<Vector2I> collectedResourceTiles = new();
     private HashSet<Vector2I> occupiedTiles = new();
@@ -61,17 +62,12 @@ public partial class GridManager : Node
         return (null, false);
     }
 
-    public bool IsTilePositionBuildable(Vector2I tilePosition)
-    {
-        return validBuildableTiles.Contains(tilePosition);
-    }
-
     public bool IsTilePositionInAnyBuildingRadius(Vector2I tilePosition)
     {
         return allTilesInBuildingRadius.Contains(tilePosition);
     }
 
-    public bool IsTileAreaBuildable(Rect2I tileArea)
+    public bool IsTileAreaBuildable(Rect2I tileArea, bool isAttackTiles = false)
     {
         var tiles = tileArea.ToTiles();
         if (tiles.Count == 0)
@@ -92,7 +88,7 @@ public partial class GridManager : Node
                     tileMapLayer != null ? tileMapLayerToElevationLayer[tileMapLayer] : null;
 
                 return isBuildable
-                    && validBuildableTiles.Contains(tilePosition)
+                    && GetBuildableTileSet(isAttackTiles).Contains(tilePosition)
                     && elevationLayer == targetElevationLayer;
             }
         );
@@ -107,9 +103,9 @@ public partial class GridManager : Node
         }
     }
 
-    public void HighlightBuildableTiles()
+    public void HighlightBuildableTiles(bool isAttackTiles = false)
     {
-        foreach (var tilePosition in validBuildableTiles)
+        foreach (var tilePosition in GetBuildableTileSet(isAttackTiles))
         {
             highlightTilemapLayer.SetCell(tilePosition, 0, Vector2I.Zero);
         }
@@ -118,10 +114,7 @@ public partial class GridManager : Node
     public void HighlightExpandedBuildableTiles(Rect2I tileArea, int radius)
     {
         var validTiles = GetValidTilesInRadius(tileArea, radius).ToHashSet();
-        var expandedTiles = validTiles
-            .Except(validBuildableTiles)
-            .Except(occupiedTiles)
-            .Except(goblinOccupiedTiles);
+        var expandedTiles = validTiles.Except(validBuildableTiles).Except(occupiedTiles);
         var atlasCoords = new Vector2I(1, 0);
         foreach (var tilePosition in expandedTiles)
         {
@@ -160,6 +153,11 @@ public partial class GridManager : Node
     public Vector2I ConvertWorldPositionToTilePosition(Vector2 worldPosition)
     {
         return (Vector2I)(worldPosition / 64).Floor();
+    }
+
+    private HashSet<Vector2I> GetBuildableTileSet(bool isAttackTiles = false)
+    {
+        return isAttackTiles ? validAttackTiles : validBuildableTiles;
     }
 
     private List<TileMapLayer> GetAllTilemapLayers(Node2D rootNode)
@@ -237,7 +235,10 @@ public partial class GridManager : Node
         );
         validBuildableTiles.UnionWith(validTiles);
         validBuildableTiles.ExceptWith(occupiedTiles);
+
+        validAttackTiles.UnionWith(validBuildableTiles);
         validBuildableTiles.ExceptWith(goblinOccupiedTiles);
+
         EmitSignal(SignalName.GridStateUpdated);
     }
 
@@ -261,13 +262,16 @@ public partial class GridManager : Node
     private void RecalculateGrid()
     {
         validBuildableTiles.Clear();
+        validAttackTiles.Clear();
         allTilesInBuildingRadius.Clear();
         occupiedTiles.Clear();
         collectedResourceTiles.Clear();
+        goblinOccupiedTiles.Clear();
 
         var buildingComponents = BuildingComponent.GetValidBuildingComponents(this);
         foreach (var buildingComponent in buildingComponents)
         {
+            UpdateGoblinOccupiedTiles(buildingComponent);
             UpdateValidBuildableTiles(buildingComponent);
             UpdateCollectedResourceTiles(buildingComponent);
         }
