@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cn2ejisugfviy"]
+[gd_scene load_steps=8 format=3 uid="uid://cn2ejisugfviy"]
 
 [ext_resource type="Script" path="res://scenes/ui/GameUI.cs" id="1_l8rxl"]
 [ext_resource type="Resource" uid="uid://2irvtramblpr" path="res://resources/building/tower.tres" id="2_jkjdi"]
 [ext_resource type="Resource" uid="uid://bmnm1a36vslf5" path="res://resources/building/village.tres" id="3_fb2nv"]
+[ext_resource type="Resource" uid="uid://cq7rho3srej5k" path="res://resources/building/barracks.tres" id="4_h4aur"]
 [ext_resource type="PackedScene" uid="uid://cqsdii53nvnpx" path="res://scenes/ui/BuildingSection.tscn" id="4_k5b58"]
 [ext_resource type="Texture2D" uid="uid://dm4lslj8ovixy" path="res://assets/ui/wood_icon.png" id="5_b4ajg"]
 
@@ -12,7 +13,7 @@ region = Rect2(39, 78, 32, 22)
 
 [node name="GameUI" type="CanvasLayer"]
 script = ExtResource("1_l8rxl")
-buildingResources = Array[Object]([ExtResource("3_fb2nv"), ExtResource("2_jkjdi")])
+buildingResources = Array[Object]([ExtResource("3_fb2nv"), ExtResource("2_jkjdi"), ExtResource("4_h4aur")])
 buildingSectionScene = ExtResource("4_k5b58")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

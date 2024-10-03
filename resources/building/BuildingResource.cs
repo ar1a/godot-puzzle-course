@@ -30,6 +30,9 @@ public partial class BuildingResource : Resource
     public int DangerRadius { get; private set; }
 
     [Export]
+    public int AttackRadius { get; private set; }
+
+    [Export]
     public PackedScene BuildingScene { get; private set; }
 
     [Export]
