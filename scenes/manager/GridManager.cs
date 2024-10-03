@@ -77,6 +77,12 @@ public partial class GridManager : Node
         var targetElevationLayer =
             firstTileMapLayer != null ? tileMapLayerToElevationLayer[firstTileMapLayer] : null;
 
+        var tileSetToCheck = GetBuildableTileSet(isAttackTiles);
+        if (isAttackTiles)
+        {
+            tileSetToCheck = tileSetToCheck.Except(occupiedTiles).ToHashSet();
+        }
+
         return tiles.All(
             (tilePosition) =>
             {
@@ -88,7 +94,7 @@ public partial class GridManager : Node
                     tileMapLayer != null ? tileMapLayerToElevationLayer[tileMapLayer] : null;
 
                 return isBuildable
-                    && GetBuildableTileSet(isAttackTiles).Contains(tilePosition)
+                    && tileSetToCheck.Contains(tilePosition)
                     && elevationLayer == targetElevationLayer;
             }
         );
@@ -117,6 +123,20 @@ public partial class GridManager : Node
         var expandedTiles = validTiles.Except(validBuildableTiles).Except(occupiedTiles);
         var atlasCoords = new Vector2I(1, 0);
         foreach (var tilePosition in expandedTiles)
+        {
+            highlightTilemapLayer.SetCell(tilePosition, 0, atlasCoords);
+        }
+    }
+
+    public void HighlightAttackTiles(Rect2I tileArea, int radius)
+    {
+        var buildingAreaTiles = tileArea.ToTiles();
+        var validTiles = GetValidTilesInRadius(tileArea, radius)
+            .ToHashSet()
+            .Except(validAttackTiles)
+            .Except(buildingAreaTiles);
+        var atlasCoords = new Vector2I(1, 0);
+        foreach (var tilePosition in validTiles)
         {
             highlightTilemapLayer.SetCell(tilePosition, 0, atlasCoords);
         }
