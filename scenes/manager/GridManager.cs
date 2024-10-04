@@ -25,7 +25,7 @@ public partial class GridManager : Node
     private HashSet<Vector2I> allTilesInBuildingRadius = new();
     private HashSet<Vector2I> collectedResourceTiles = new();
     private HashSet<Vector2I> occupiedTiles = new();
-    private HashSet<Vector2I> goblinOccupiedTiles = new();
+    private HashSet<Vector2I> dangerOccupiedTiles = new();
     private HashSet<Vector2I> attackTiles = new();
 
     [Export]
@@ -112,10 +112,10 @@ public partial class GridManager : Node
         );
     }
 
-    public void HighlightGoblinOccupiedTiles()
+    public void HighlightDangerOccupiedTiles()
     {
         var atlasCoords = new Vector2I(2, 0);
-        foreach (var tilePosition in goblinOccupiedTiles)
+        foreach (var tilePosition in dangerOccupiedTiles)
         {
             highlightTilemapLayer.SetCell(tilePosition, 0, atlasCoords);
         }
@@ -194,8 +194,7 @@ public partial class GridManager : Node
         var dependentBuildings = BuildingComponent
             .GetNonDangerBuildingComponents(this)
             .Where(x =>
-                x.GetTileArea()
-                    .ToTiles()
+                x.GetOccupiedCellPositions()
                     .Any(
                         (tilePosition) =>
                             buildingToBuildableTiles[toDestroyBuildingComponent]
@@ -208,7 +207,7 @@ public partial class GridManager : Node
         var allBuildingsStillValid = dependentBuildings.All(
             (dependentBuilding) =>
             {
-                var tilesForBuilding = dependentBuilding.GetTileArea().ToTiles();
+                var tilesForBuilding = dependentBuilding.GetOccupiedCellPositions();
                 var buildingsToCheck = buildingToBuildableTiles.Keys.Where(buildingComponent =>
                     buildingComponent != toDestroyBuildingComponent
                     && buildingComponent != dependentBuilding
@@ -244,8 +243,7 @@ public partial class GridManager : Node
             .GetDangerBuildingComponents(this)
             .Where(buildingComponent =>
                 buildingComponent
-                    .GetTileArea()
-                    .ToTiles()
+                    .GetOccupiedCellPositions()
                     .Any(x => attackBuildingToTiles[toDestroyBuildingComponent].Contains(x))
             );
 
@@ -253,8 +251,7 @@ public partial class GridManager : Node
             return true;
         var allDangerBuildingsStillDisabled = disabledDangerBuildings.All(dangerBuilding =>
             dangerBuilding
-                .GetTileArea()
-                .ToTiles()
+                .GetOccupiedCellPositions()
                 .Any(tilePosition =>
                     attackBuildingToTiles
                         .Keys.Where(attackBuilding => attackBuilding != toDestroyBuildingComponent)
@@ -275,8 +272,7 @@ public partial class GridManager : Node
             var dangerTiles = dangerBuildingToTiles[dangerBuilding];
             return nonDangerBuildings.Any(nonDangerBuilding =>
                 nonDangerBuilding
-                    .GetTileArea()
-                    .ToTiles()
+                    .GetOccupiedCellPositions()
                     .Any(tilePosition => dangerTiles.Contains(tilePosition))
             );
         });
@@ -313,8 +309,7 @@ public partial class GridManager : Node
                 if (visitedBuildings.Contains(x))
                     return false;
 
-                return x.GetTileArea()
-                        .ToTiles()
+                return x.GetOccupiedCellPositions()
                         .All(
                             (tilePosition) =>
                                 buildingToBuildableTiles[rootBuilding].Contains(tilePosition)
@@ -371,7 +366,7 @@ public partial class GridManager : Node
         }
     }
 
-    private void UpdateGoblinOccupiedTiles(BuildingComponent buildingComponent)
+    private void UpdateDangerOccupiedTiles(BuildingComponent buildingComponent)
     {
         occupiedTiles.UnionWith(buildingComponent.GetOccupiedCellPositions());
 
@@ -390,7 +385,7 @@ public partial class GridManager : Node
                 return;
 
             tilesInRadius.ExceptWith(occupiedTiles);
-            goblinOccupiedTiles.UnionWith(tilesInRadius);
+            dangerOccupiedTiles.UnionWith(tilesInRadius);
         }
     }
 
@@ -418,7 +413,7 @@ public partial class GridManager : Node
         validBuildableTiles.ExceptWith(occupiedTiles);
 
         validBuildableAttackTiles.UnionWith(validBuildableTiles);
-        validBuildableTiles.ExceptWith(goblinOccupiedTiles);
+        validBuildableTiles.ExceptWith(dangerOccupiedTiles);
 
         EmitSignal(SignalName.GridStateUpdated);
     }
@@ -462,7 +457,7 @@ public partial class GridManager : Node
         allTilesInBuildingRadius.Clear();
         occupiedTiles.Clear();
         collectedResourceTiles.Clear();
-        goblinOccupiedTiles.Clear();
+        dangerOccupiedTiles.Clear();
         attackTiles.Clear();
         buildingToBuildableTiles.Clear();
         dangerBuildingToTiles.Clear();
@@ -473,19 +468,18 @@ public partial class GridManager : Node
         {
             UpdateBuildingComponentGridState(buildingComponent);
         }
-        CheckGoblinCampDestruction();
+        CheckDangerCampDestruction();
 
         EmitSignal(SignalName.ResourceTilesUpdated, collectedResourceTiles.Count);
         EmitSignal(SignalName.GridStateUpdated);
     }
 
-    private void CheckGoblinCampDestruction()
+    private void CheckDangerCampDestruction()
     {
         var dangerBuildings = BuildingComponent.GetDangerBuildingComponents(this);
         foreach (var building in dangerBuildings)
         {
-            var tileArea = building.GetTileArea();
-            var isInsideAttackTile = tileArea.ToTiles().Any(attackTiles.Contains);
+            var isInsideAttackTile = building.GetOccupiedCellPositions().Any(attackTiles.Contains);
             if (isInsideAttackTile)
             {
                 building.Disable();
@@ -497,13 +491,13 @@ public partial class GridManager : Node
         }
     }
 
-    private void RecalculateGoblinOccupiedTiles()
+    private void RecalculateDangerOccupiedTiles()
     {
-        goblinOccupiedTiles.Clear();
+        dangerOccupiedTiles.Clear();
         var dangerBuildings = BuildingComponent.GetDangerBuildingComponents(this);
         foreach (var building in dangerBuildings)
         {
-            UpdateGoblinOccupiedTiles(building);
+            UpdateDangerOccupiedTiles(building);
         }
     }
 
@@ -560,7 +554,7 @@ public partial class GridManager : Node
 
     private void UpdateBuildingComponentGridState(BuildingComponent buildingComponent)
     {
-        UpdateGoblinOccupiedTiles(buildingComponent);
+        UpdateDangerOccupiedTiles(buildingComponent);
         UpdateValidBuildableTiles(buildingComponent);
         UpdateCollectedResourceTiles(buildingComponent);
         UpdateAttackTiles(buildingComponent);
@@ -569,7 +563,7 @@ public partial class GridManager : Node
     private void OnBuildingPlaced(BuildingComponent buildingComponent)
     {
         UpdateBuildingComponentGridState(buildingComponent);
-        CheckGoblinCampDestruction();
+        CheckDangerCampDestruction();
     }
 
     private void OnBuildingDestroyed(BuildingComponent buildingComponent)
