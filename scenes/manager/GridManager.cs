@@ -370,23 +370,23 @@ public partial class GridManager : Node
     {
         occupiedTiles.UnionWith(buildingComponent.GetOccupiedCellPositions());
 
-        if (buildingComponent.BuildingResource.IsDangerBuilding())
-        {
-            var tileArea = buildingComponent.GetTileArea();
-            var tilesInRadius = GetValidTilesInRadius(
-                    tileArea,
-                    buildingComponent.BuildingResource.DangerRadius
-                )
-                .ToHashSet();
+        if (!buildingComponent.BuildingResource.IsDangerBuilding())
+            return;
 
-            dangerBuildingToTiles[buildingComponent] = tilesInRadius.ToHashSet();
+        var tileArea = buildingComponent.GetTileArea();
+        var tilesInRadius = GetValidTilesInRadius(
+                tileArea,
+                buildingComponent.BuildingResource.DangerRadius
+            )
+            .ToHashSet();
 
-            if (buildingComponent.IsDisabled)
-                return;
+        dangerBuildingToTiles[buildingComponent] = tilesInRadius.ToHashSet();
 
-            tilesInRadius.ExceptWith(occupiedTiles);
-            dangerOccupiedTiles.UnionWith(tilesInRadius);
-        }
+        if (buildingComponent.IsDisabled)
+            return;
+
+        tilesInRadius.ExceptWith(occupiedTiles);
+        dangerOccupiedTiles.UnionWith(tilesInRadius);
     }
 
     private void UpdateValidBuildableTiles(BuildingComponent buildingComponent)
