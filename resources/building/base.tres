@@ -6,9 +6,13 @@
 [resource]
 script = ExtResource("1_ccreb")
 DisplayName = "Base"
+Description = ""
+IsBase = true
 IsDeletable = false
 Dimensions = Vector2i(5, 2)
 ResourceCost = 0
 BuildableRadius = 6
 ResourceRadius = 0
+DangerRadius = 0
+AttackRadius = 0
 BuildingScene = ExtResource("1_ei3r1")
