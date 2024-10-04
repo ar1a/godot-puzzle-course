@@ -7,10 +7,12 @@
 script = ExtResource("1_nncqy")
 DisplayName = "Goblin Camp"
 Description = ""
+IsBase = false
 IsDeletable = false
 Dimensions = Vector2i(2, 2)
 ResourceCost = 0
 BuildableRadius = 0
 ResourceRadius = 0
-DangerRadius = 8
+DangerRadius = 1
+AttackRadius = 0
 BuildingScene = ExtResource("1_1clc3")

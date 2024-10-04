@@ -185,41 +185,49 @@ public partial class GridManager : Node
         return (Vector2I)(worldPosition / 64).Floor();
     }
 
+    private bool WillBuildingDestructionCreateOrphanBuildings(
+        BuildingComponent toDestroyBuildingComponent
+    )
+    {
+        var dependentBuildings = BuildingComponent
+            .GetNonDangerBuildingComponents(this)
+            .Where(x =>
+                x.GetTileArea()
+                    .ToTiles()
+                    .Any(
+                        (tilePosition) =>
+                            buildingToBuildableTiles[toDestroyBuildingComponent]
+                                .Contains(tilePosition)
+                    )
+                && x != toDestroyBuildingComponent
+                && !x.BuildingResource.IsBase
+            );
+
+        var allBuildingsStillValid = dependentBuildings.All(
+            (dependentBuilding) =>
+            {
+                var tilesForBuilding = dependentBuilding.GetTileArea().ToTiles();
+                var buildingsToCheck = buildingToBuildableTiles.Keys.Where(buildingComponent =>
+                    buildingComponent != toDestroyBuildingComponent
+                    && buildingComponent != dependentBuilding
+                );
+
+                return tilesForBuilding.All(tilePosition =>
+                    buildingsToCheck.Any(key =>
+                        buildingToBuildableTiles[key].Contains(tilePosition)
+                    )
+                );
+            }
+        );
+        return !allBuildingsStillValid;
+    }
+
     public bool CanDestroyBuilidng(BuildingComponent toDestroyBuildingComponent)
     {
         if (toDestroyBuildingComponent.BuildingResource.BuildableRadius > 0)
         {
-            var dependentBuildings = BuildingComponent
-                .GetValidBuildingComponents(this)
-                .Where(x =>
-                    x.GetTileArea()
-                        .ToTiles()
-                        .Any(
-                            (tilePosition) =>
-                                buildingToBuildableTiles[toDestroyBuildingComponent]
-                                    .Contains(tilePosition)
-                        )
-                    && x != toDestroyBuildingComponent
-                    && !x.BuildingResource.IsBase
-                );
-
-            var allBuildingsStillValid = dependentBuildings.All(
-                (dependentBuilding) =>
-                {
-                    var tilesForBuilding = dependentBuilding.GetTileArea().ToTiles();
-                    return tilesForBuilding.All(tilePosition =>
-                        buildingToBuildableTiles
-                            .Keys.Where(key =>
-                                key != toDestroyBuildingComponent && key != dependentBuilding
-                            )
-                            .Any(key => buildingToBuildableTiles[key].Contains(tilePosition))
-                    );
-                }
-            );
-            if (!allBuildingsStillValid)
-                return false;
-
-            return IsBuildingNetworkConnected(toDestroyBuildingComponent);
+            return !WillBuildingDestructionCreateOrphanBuildings(toDestroyBuildingComponent)
+                && IsBuildingNetworkConnected(toDestroyBuildingComponent);
         }
         return true;
     }
@@ -245,7 +253,7 @@ public partial class GridManager : Node
     )
     {
         var dependentBuildings = BuildingComponent
-            .GetValidBuildingComponents(this)
+            .GetNonDangerBuildingComponents(this)
             .Where(x =>
             {
                 if (x.BuildingResource.BuildableRadius == 0)
@@ -255,7 +263,7 @@ public partial class GridManager : Node
 
                 return x.GetTileArea()
                         .ToTiles()
-                        .Any(
+                        .All(
                             (tilePosition) =>
                                 buildingToBuildableTiles[rootBuilding].Contains(tilePosition)
                         )
