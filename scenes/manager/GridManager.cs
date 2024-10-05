@@ -263,7 +263,7 @@ public partial class GridManager : Node
 
         var nonDangerBuildings = BuildingComponent
             .GetNonDangerBuildingComponents(this)
-            .Where(x => x != toDestroyBuildingComponent);
+            .Where(x => x != toDestroyBuildingComponent && !x.BuildingResource.IsBase);
         var anyDangerBuildingContainsPlayerBuilding = disabledDangerBuildings.Any(dangerBuilding =>
         {
             var dangerTiles = dangerBuildingToTiles[dangerBuilding];
