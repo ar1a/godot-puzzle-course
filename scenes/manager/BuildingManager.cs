@@ -75,7 +75,6 @@ public partial class BuildingManager : Node
                 else if (
                     toPlaceBuildingResource != null
                     && @event.IsActionPressed(ACTION_LEFT_CLICK)
-                    && IsBuildingPlaceableAtArea(hoveredGridArea)
                 )
                 {
                     PlaceBuildingAtHoveredCellPosition();
@@ -86,11 +85,16 @@ public partial class BuildingManager : Node
         }
     }
 
+    public bool CanAffordBuilding()
+    {
+        return AvailableResourceCount >= toPlaceBuildingResource.ResourceCost;
+    }
+
     public bool IsBuildingPlaceableAtArea(Rect2I tileArea)
     {
         var isAttackTiles = toPlaceBuildingResource.IsAttackBuilding();
         var allTilesBuildable = gridManager.IsTileAreaBuildable(tileArea, isAttackTiles);
-        return allTilesBuildable && AvailableResourceCount >= toPlaceBuildingResource.ResourceCost;
+        return allTilesBuildable && CanAffordBuilding();
     }
 
     public void SetStartingResourceCount(int count)
@@ -171,6 +175,16 @@ public partial class BuildingManager : Node
 
     private void PlaceBuildingAtHoveredCellPosition()
     {
+        if (!CanAffordBuilding())
+        {
+            FloatingTextManager.ShowMessage("Can't afford!");
+            return;
+        }
+        if (!IsBuildingPlaceableAtArea(hoveredGridArea))
+        {
+            FloatingTextManager.ShowMessage("Invalid placement!");
+            return;
+        }
         var building = toPlaceBuildingResource.BuildingScene.Instantiate<Node2D>();
         ySortRoot.AddChild(building);
 
@@ -193,7 +207,10 @@ public partial class BuildingManager : Node
         if (buildingComponent == null)
             return;
         if (!gridManager.CanDestroyBuilidng(buildingComponent))
+        {
+            FloatingTextManager.ShowMessage("Can't destroy!");
             return;
+        }
 
         currentlyUsedResourceCount -= buildingComponent.BuildingResource.ResourceCost;
         buildingComponent.Destroy();
