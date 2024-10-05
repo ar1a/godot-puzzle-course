@@ -59,7 +59,7 @@ public partial class BuildingGhost : Node2D
 
     public void DoHoverAnimation()
     {
-        if (spriteTween != null && spriteTween.IsValid())
+        if (spriteTween?.IsValid() == true)
             spriteTween.Kill();
         spriteTween = CreateTween();
         spriteTween

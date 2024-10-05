@@ -79,7 +79,8 @@ public partial class LevelSelectScreen : MarginContainer
 
             levelSelectSection.SetLevelDefinition(levelDefinitions[i]);
             levelSelectSection.SetLevelIndex(i);
-            levelSelectSection.LevelSelected += (index) => LevelManager.Instance.ChangeLevel(index);
+            levelSelectSection.LevelSelected += static (index) =>
+                LevelManager.Instance.ChangeLevel(index);
         }
     }
 }

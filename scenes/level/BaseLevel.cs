@@ -41,7 +41,7 @@ public partial class BaseLevel : Node
 
     private void OnGridStateUpdated()
     {
-        var goldMineTilePosition = gridManager.ConvertWorldPositionToTilePosition(
+        var goldMineTilePosition = GridManager.ConvertWorldPositionToTilePosition(
             goldMine.GlobalPosition
         );
         if (gridManager.IsTilePositionInAnyBuildingRadius(goldMineTilePosition))

@@ -11,7 +11,7 @@ dotnet_naming_symbols.private_internal_fields.applicable_accessibilities = priva
 dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 
 # Prefer braces
-csharp_prefer_braces = true:silent
+csharp_prefer_braces = when_multiline
 
 # Prefer var
 csharp_style_var_for_built_in_types = true:suggestion
@@ -22,3 +22,9 @@ dotnet_style_predefined_type_for_member_access = true:suggestion
 
 # namespace file scope
 csharp_style_namespace_declarations = file_scoped
+
+# Remove redundant default switch section
+dotnet_diagnostic.rcs1070.severity = none
+
+# stop asking me to do `_ = EmitSignal`
+dotnet_diagnostic.IDE0058.severity = none

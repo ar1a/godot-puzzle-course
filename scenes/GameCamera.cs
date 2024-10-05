@@ -25,7 +25,7 @@ public partial class GameCamera : Camera2D
         if (Input.IsActionPressed("move_map"))
         {
             var mousePosition = GetViewport().GetMousePosition();
-            GlobalPosition -= (mousePosition - fixedTogglePoint);
+            GlobalPosition -= mousePosition - fixedTogglePoint;
             fixedTogglePoint = mousePosition;
         }
 

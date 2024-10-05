@@ -31,7 +31,7 @@ public partial class BuildingAnimatorComponent : Node2D
     {
         if (animationRootNode == null)
             return;
-        if (activeTween != null && activeTween.IsValid())
+        if (activeTween?.IsValid() == true)
             activeTween.Kill();
 
         activeTween = CreateTween();
@@ -62,7 +62,7 @@ public partial class BuildingAnimatorComponent : Node2D
     {
         if (animationRootNode == null)
             return;
-        if (activeTween != null && activeTween.IsValid())
+        if (activeTween?.IsValid() == true)
             activeTween.Kill();
 
         // snap to zero if destroyed during placing animation
@@ -92,8 +92,7 @@ public partial class BuildingAnimatorComponent : Node2D
 
     private void SetupNodes()
     {
-        var spriteNode = GetChildren().FirstOrDefault() as Node2D;
-        if (spriteNode == null)
+        if (GetChildren().FirstOrDefault() is not Node2D spriteNode)
             return;
         RemoveChild(spriteNode);
         Position = spriteNode.Position;

@@ -18,24 +18,26 @@ public partial class BuildingComponent : Node2D
     public bool IsDestroying { get; private set; }
     public bool IsDisabled { get; private set; }
 
-    private HashSet<Vector2I> occupiedTiles = new();
+    private readonly HashSet<Vector2I> occupiedTiles = new();
 
     public static IEnumerable<BuildingComponent> GetValidBuildingComponents(Node node)
     {
         return node.GetTree()
             .GetNodesInGroup(nameof(BuildingComponent))
             .Cast<BuildingComponent>()
-            .Where(x => !x.IsDestroying);
+            .Where(static x => !x.IsDestroying);
     }
 
     public static IEnumerable<BuildingComponent> GetDangerBuildingComponents(Node node)
     {
-        return GetValidBuildingComponents(node).Where(x => x.BuildingResource.IsDangerBuilding());
+        return GetValidBuildingComponents(node)
+            .Where(static x => x.BuildingResource.IsDangerBuilding());
     }
 
     public static IEnumerable<BuildingComponent> GetNonDangerBuildingComponents(Node node)
     {
-        return GetValidBuildingComponents(node).Where(x => !x.BuildingResource.IsDangerBuilding());
+        return GetValidBuildingComponents(node)
+            .Where(static x => !x.BuildingResource.IsDangerBuilding());
     }
 
     public override void _Ready()
@@ -103,9 +105,9 @@ public partial class BuildingComponent : Node2D
     private void CalculateOccupiedCellPositions()
     {
         var gridPosition = GetGridCellPosition();
-        for (int x = gridPosition.X; x < gridPosition.X + BuildingResource.Dimensions.X; x++)
+        for (var x = gridPosition.X; x < gridPosition.X + BuildingResource.Dimensions.X; x++)
         {
-            for (int y = gridPosition.Y; y < gridPosition.Y + BuildingResource.Dimensions.Y; y++)
+            for (var y = gridPosition.Y; y < gridPosition.Y + BuildingResource.Dimensions.Y; y++)
             {
                 occupiedTiles.Add(new Vector2I(x, y));
             }

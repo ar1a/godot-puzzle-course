@@ -1,5 +1,6 @@
-using Game.UI;
 using Godot;
+
+namespace Game.UI;
 
 public partial class MainMenu : Node
 {

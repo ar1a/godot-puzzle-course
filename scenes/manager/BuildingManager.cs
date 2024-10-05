@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Game.Building;
 using Game.Component;
@@ -31,8 +30,8 @@ public partial class BuildingManager : Node
 
     private enum State
     {
-        Normal,
-        PlacingBuilding,
+        Normal = 0,
+        PlacingBuilding = 1,
     }
 
     private int currentResourceCount;
@@ -42,7 +41,7 @@ public partial class BuildingManager : Node
     private BuildingGhost buildingGhost;
     private Vector2 buildingGhostDimensions;
     private State currentState = State.Normal;
-    private int startingResourceCount = 0;
+    private int startingResourceCount;
 
     private int AvailableResourceCount =>
         startingResourceCount + currentResourceCount - currentlyUsedResourceCount;
@@ -58,24 +57,24 @@ public partial class BuildingManager : Node
             .CallDeferred();
     }
 
-    public override void _UnhandledInput(InputEvent evt)
+    public override void _UnhandledInput(InputEvent @event)
     {
         switch (currentState)
         {
             case State.Normal:
-                if (evt.IsActionPressed(ACTION_RIGHT_CLICK))
+                if (@event.IsActionPressed(ACTION_RIGHT_CLICK))
                 {
                     DestroyBuildAtHoveredCellPosition();
                 }
                 break;
             case State.PlacingBuilding:
-                if (evt.IsActionPressed(ACTION_CANCEL))
+                if (@event.IsActionPressed(ACTION_CANCEL))
                 {
                     ChangeState(State.Normal);
                 }
                 else if (
                     toPlaceBuildingResource != null
-                    && evt.IsActionPressed(ACTION_LEFT_CLICK)
+                    && @event.IsActionPressed(ACTION_LEFT_CLICK)
                     && IsBuildingPlaceableAtArea(hoveredGridArea)
                 )
                 {
@@ -101,7 +100,7 @@ public partial class BuildingManager : Node
 
     public override void _Process(double delta)
     {
-        Vector2I mouseGridPosition = Vector2I.Zero;
+        var mouseGridPosition = Vector2I.Zero;
         var rootCell = hoveredGridArea.Position;
 
         switch (currentState)
@@ -114,6 +113,8 @@ public partial class BuildingManager : Node
                     buildingGhostDimensions
                 );
                 buildingGhost.GlobalPosition = mouseGridPosition * 64;
+                break;
+            default:
                 break;
         }
 
@@ -215,6 +216,8 @@ public partial class BuildingManager : Node
                 break;
             case State.PlacingBuilding:
                 UpdateGridDisplay();
+                break;
+            default:
                 break;
         }
     }

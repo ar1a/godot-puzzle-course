@@ -20,13 +20,13 @@ public partial class GridManager : Node
     [Signal]
     public delegate void GridStateUpdatedEventHandler();
 
-    private HashSet<Vector2I> validBuildableTiles = new();
-    private HashSet<Vector2I> validBuildableAttackTiles = new();
-    private HashSet<Vector2I> allTilesInBuildingRadius = new();
-    private HashSet<Vector2I> collectedResourceTiles = new();
-    private HashSet<Vector2I> occupiedTiles = new();
-    private HashSet<Vector2I> dangerOccupiedTiles = new();
-    private HashSet<Vector2I> attackTiles = new();
+    private readonly HashSet<Vector2I> validBuildableTiles = new();
+    private readonly HashSet<Vector2I> validBuildableAttackTiles = new();
+    private readonly HashSet<Vector2I> allTilesInBuildingRadius = new();
+    private readonly HashSet<Vector2I> collectedResourceTiles = new();
+    private readonly HashSet<Vector2I> occupiedTiles = new();
+    private readonly HashSet<Vector2I> dangerOccupiedTiles = new();
+    private readonly HashSet<Vector2I> attackTiles = new();
 
     [Export]
     private TileMapLayer highlightTilemapLayer;
@@ -35,10 +35,11 @@ public partial class GridManager : Node
     private TileMapLayer baseTerrainTilemapLayer;
 
     private List<TileMapLayer> allTilemapLayers = new();
-    private Dictionary<TileMapLayer, ElevationLayer> tileMapLayerToElevationLayer = new();
-    private Dictionary<BuildingComponent, HashSet<Vector2I>> buildingToBuildableTiles = new();
-    private Dictionary<BuildingComponent, HashSet<Vector2I>> dangerBuildingToTiles = new();
-    private Dictionary<BuildingComponent, HashSet<Vector2I>> attackBuildingToTiles = new();
+    private readonly Dictionary<TileMapLayer, ElevationLayer> tileMapLayerToElevationLayer = new();
+    private readonly Dictionary<BuildingComponent, HashSet<Vector2I>> buildingToBuildableTiles =
+        new();
+    private readonly Dictionary<BuildingComponent, HashSet<Vector2I>> dangerBuildingToTiles = new();
+    private readonly Dictionary<BuildingComponent, HashSet<Vector2I>> attackBuildingToTiles = new();
 
     public override void _Ready()
     {
@@ -85,7 +86,7 @@ public partial class GridManager : Node
         if (tiles.Count == 0)
             return false;
 
-        (TileMapLayer firstTileMapLayer, _) = GetTileCustomData(tiles[0], IS_BUILDABLE);
+        (var firstTileMapLayer, _) = GetTileCustomData(tiles[0], IS_BUILDABLE);
         var targetElevationLayer =
             firstTileMapLayer != null ? tileMapLayerToElevationLayer[firstTileMapLayer] : null;
 
@@ -98,10 +99,7 @@ public partial class GridManager : Node
         return tiles.All(
             (tilePosition) =>
             {
-                (TileMapLayer tileMapLayer, bool isBuildable) = GetTileCustomData(
-                    tilePosition,
-                    IS_BUILDABLE
-                );
+                (var tileMapLayer, var isBuildable) = GetTileCustomData(tilePosition, IS_BUILDABLE);
                 var elevationLayer =
                     tileMapLayer != null ? tileMapLayerToElevationLayer[tileMapLayer] : null;
 
@@ -182,7 +180,7 @@ public partial class GridManager : Node
         return ConvertWorldPositionToTilePosition(highlightTilemapLayer.GetGlobalMousePosition());
     }
 
-    public Vector2I ConvertWorldPositionToTilePosition(Vector2 worldPosition)
+    public static Vector2I ConvertWorldPositionToTilePosition(Vector2 worldPosition)
     {
         return (Vector2I)(worldPosition / 64).Floor();
     }
@@ -253,11 +251,10 @@ public partial class GridManager : Node
             dangerBuilding
                 .GetOccupiedCellPositions()
                 .Any(tilePosition =>
-                    attackBuildingToTiles
-                        .Keys.Where(attackBuilding => attackBuilding != toDestroyBuildingComponent)
-                        .Any(attackBuilding =>
-                            attackBuildingToTiles[attackBuilding].Contains(tilePosition)
-                        )
+                    attackBuildingToTiles.Keys.Any(attackBuilding =>
+                        attackBuilding != toDestroyBuildingComponent
+                        && attackBuildingToTiles[attackBuilding].Contains(tilePosition)
+                    )
                 )
         );
 
@@ -304,12 +301,9 @@ public partial class GridManager : Node
             .GetNonDangerBuildingComponents(this)
             .Where(x =>
             {
-                if (x.BuildingResource.BuildableRadius == 0)
-                    return false;
-                if (visitedBuildings.Contains(x))
-                    return false;
-
-                return x.GetOccupiedCellPositions()
+                return x.BuildingResource.BuildableRadius != 0
+                    && !visitedBuildings.Contains(x)
+                    && x.GetOccupiedCellPositions()
                         .All(
                             (tilePosition) =>
                                 buildingToBuildableTiles[rootBuilding].Contains(tilePosition)
@@ -330,7 +324,7 @@ public partial class GridManager : Node
         return isAttackTiles ? validBuildableAttackTiles : validBuildableTiles;
     }
 
-    private List<TileMapLayer> GetAllTilemapLayers(Node2D rootNode)
+    private static List<TileMapLayer> GetAllTilemapLayers(Node2D rootNode)
     {
         var result = new List<TileMapLayer>();
         var children = rootNode.GetChildren();
@@ -399,7 +393,7 @@ public partial class GridManager : Node
             var allTiles = GetTilesInRadius(
                 tileArea,
                 buildingComponent.BuildingResource.BuildableRadius,
-                (_) => true
+                static (_) => true
             );
             allTilesInBuildingRadius.UnionWith(allTiles);
 
@@ -443,7 +437,7 @@ public partial class GridManager : Node
         var newAttackTiles = GetTilesInRadius(
                 tileArea,
                 buildingComponent.BuildingResource.AttackRadius,
-                (_) => true
+                static (_) => true
             )
             .ToHashSet();
         attackBuildingToTiles[buildingComponent] = newAttackTiles;
@@ -501,7 +495,11 @@ public partial class GridManager : Node
         }
     }
 
-    private bool IsTileInsideCircle(Vector2 centerPosition, Vector2 tilePosiiton, float radius)
+    private static bool IsTileInsideCircle(
+        Vector2 centerPosition,
+        Vector2 tilePosiiton,
+        float radius
+    )
     {
         var dx = centerPosition.X - (tilePosiiton.X + .5);
         var dy = centerPosition.Y - (tilePosiiton.Y + .5);
@@ -509,7 +507,7 @@ public partial class GridManager : Node
         return distance <= radius * radius;
     }
 
-    private List<Vector2I> GetTilesInRadius(
+    private static List<Vector2I> GetTilesInRadius(
         Rect2I tileArea,
         int radius,
         Func<Vector2I, bool> filterFn
@@ -527,7 +525,10 @@ public partial class GridManager : Node
                     !IsTileInsideCircle(tileAreaCenter, tilePosition, radius + radiusMod)
                     || !filterFn(tilePosition)
                 )
+                {
                     continue;
+                }
+
                 result.Add(tilePosition);
             }
         }
