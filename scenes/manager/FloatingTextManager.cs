@@ -1,4 +1,3 @@
-using System;
 using Game.UI;
 using Godot;
 
