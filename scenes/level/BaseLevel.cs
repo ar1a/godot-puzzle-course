@@ -1,3 +1,4 @@
+using Game.Autoload;
 using Game.Manager;
 using Game.Resources.Level;
 using Game.UI;
@@ -20,6 +21,7 @@ public partial class BaseLevel : Node
     private Node2D baseBuilding;
     private TileMapLayer baseTerrainTilemapLayer;
     private GameUI gameUI;
+    private bool isComplete;
 
     public override void _Ready()
     {
@@ -39,17 +41,24 @@ public partial class BaseLevel : Node
         gridManager.GridStateUpdated += OnGridStateUpdated;
     }
 
+    private void ShowLevelComplete()
+    {
+        isComplete = true;
+        SaveManager.SaveLevelCompletion(levelDefinitionResource);
+        goldMine.SetActive();
+        var levelCompleteScreen = levelCompleteScene.Instantiate<LevelCompleteScreen>();
+        AddChild(levelCompleteScreen);
+        gameUI.HideUI();
+    }
+
     private void OnGridStateUpdated()
     {
+        if (isComplete)
+            return;
         var goldMineTilePosition = GridManager.ConvertWorldPositionToTilePosition(
             goldMine.GlobalPosition
         );
         if (gridManager.IsTilePositionInAnyBuildingRadius(goldMineTilePosition))
-        {
-            goldMine.SetActive();
-            var levelCompleteScreen = levelCompleteScene.Instantiate<LevelCompleteScreen>();
-            AddChild(levelCompleteScreen);
-            gameUI.HideUI();
-        }
+            ShowLevelComplete();
     }
 }
