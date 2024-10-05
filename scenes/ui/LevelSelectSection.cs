@@ -1,4 +1,3 @@
-using System;
 using Game.Autoload;
 using Game.Resources.Level;
 using Godot;
@@ -24,6 +23,7 @@ public partial class LevelSelectSection : PanelContainer
         completedIndicator = GetNode<TextureRect>("%CompletedIndicator");
 
         button.Pressed += OnButtonPressed;
+        AudioHelpers.RegisterButtons(new Button[] { button });
     }
 
     private void OnButtonPressed()

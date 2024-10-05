@@ -24,10 +24,6 @@ public partial class LevelSelectScreen : MarginContainer
     private int maxPageIndex;
     private LevelDefinitionResource[] levelDefinitions;
 
-    //TODO: delete me?
-    private int startIndex => PAGE_SIZE * pageIndex;
-    private int endIndex => Mathf.Min(startIndex + PAGE_SIZE, levelDefinitions.Length);
-
     public override void _Ready()
     {
         gridContainer = GetNode<GridContainer>("%GridContainer");
@@ -41,6 +37,9 @@ public partial class LevelSelectScreen : MarginContainer
         backButton.Pressed += () => EmitSignal(SignalName.BackPressed);
         previousPageButton.Pressed += () => OnPageChanged(-1);
         nextPageButton.Pressed += () => OnPageChanged(1);
+        AudioHelpers.RegisterButtons(
+            new Button[] { backButton, previousPageButton, nextPageButton }
+        );
 
         ShowPage();
     }

@@ -1,3 +1,4 @@
+using Game.Autoload;
 using Game.Resources.Building;
 using Godot;
 
@@ -21,6 +22,7 @@ public partial class BuildingSection : PanelContainer
         button = GetNode<Button>("%Button");
 
         button.Pressed += () => EmitSignal(SignalName.Pressed);
+        AudioHelpers.RegisterButtons(new Button[] { button });
     }
 
     public void SetBuildingResource(BuildingResource buildingResource)
