@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://vjk38dv70v58"]
+[gd_scene load_steps=20 format=3 uid="uid://vjk38dv70v58"]
 
+[ext_resource type="Script" path="res://scenes/building/GoblinCamp.cs" id="1_at3gp"]
 [ext_resource type="PackedScene" uid="uid://1yhtftqdjv6i" path="res://scenes/component/BuildingComponent.tscn" id="1_m54i5"]
 [ext_resource type="PackedScene" uid="uid://biwjdkrgyfrgp" path="res://scenes/component/BuildingAnimatorComponent.tscn" id="2_cvphp"]
 [ext_resource type="Texture2D" uid="uid://7o187s2w340s" path="res://assets/buildings/wood_tower_red.png" id="3_co1u3"]
+[ext_resource type="Texture2D" uid="uid://cgsxw7chk0d6e" path="res://assets/buildings/wood_tower_destroyed.png" id="4_4lb64"]
+[ext_resource type="Texture2D" uid="uid://cdeko4w7tisj3" path="res://assets/effects/fire.png" id="5_s7jsm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tk10i"]
 atlas = ExtResource("3_co1u3")
@@ -38,10 +41,79 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_4lb64")
+}],
+"loop": true,
+"name": &"destroyed",
+"speed": 5.0
 }]
 
-[node name="GoblinCamp" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqvrw"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2tsa"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5e2x"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d08cg"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_83f6d"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7me1e"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1ad0"]
+atlas = ExtResource("5_s7jsm")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m57jn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqvrw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2tsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5e2x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d08cg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_83f6d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7me1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1ad0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="GoblinCamp" type="Node2D" node_paths=PackedStringArray("buildingComponent", "fire", "animatedSprite2D")]
 y_sort_enabled = true
+script = ExtResource("1_at3gp")
+buildingComponent = NodePath("BuildingComponent")
+fire = NodePath("BuildingAnimatorComponent/AnimatedSprite2D/Fire")
+animatedSprite2D = NodePath("BuildingAnimatorComponent/AnimatedSprite2D")
 
 [node name="BuildingComponent" parent="." node_paths=PackedStringArray("buildingAnimatorComponent") instance=ExtResource("1_m54i5")]
 buildingResourcePath = "res://resources/building/goblin_camp.tres"
@@ -50,9 +122,17 @@ buildingAnimatorComponent = NodePath("../BuildingAnimatorComponent")
 [node name="BuildingAnimatorComponent" parent="." instance=ExtResource("2_cvphp")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="BuildingAnimatorComponent"]
+unique_name_in_owner = true
 position = Vector2(64, 96)
 sprite_frames = SubResource("SpriteFrames_2mp32")
 autoplay = "default"
-frame_progress = 0.0835629
 centered = false
 offset = Vector2(-128, -160)
+
+[node name="Fire" type="AnimatedSprite2D" parent="BuildingAnimatorComponent/AnimatedSprite2D"]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -80)
+sprite_frames = SubResource("SpriteFrames_m57jn")
+autoplay = "default"
+frame_progress = 0.978573
