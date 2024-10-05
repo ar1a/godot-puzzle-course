@@ -15,8 +15,11 @@ public partial class GoblinCamp : Node2D
     [Export]
     private AnimatedSprite2D animatedSprite2D;
 
+    private AudioStreamPlayer audioStreamPlayer;
+
     public override void _Ready()
     {
+        audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
         fire.Visible = false;
         buildingComponent.Disabled += OnDisabled;
         buildingComponent.Enabled += OnEnabled;
@@ -26,6 +29,7 @@ public partial class GoblinCamp : Node2D
     {
         animatedSprite2D.Play("destroyed");
         fire.Visible = true;
+        audioStreamPlayer.Play();
     }
 
     private void OnEnabled()

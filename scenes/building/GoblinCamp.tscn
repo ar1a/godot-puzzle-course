@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://vjk38dv70v58"]
+[gd_scene load_steps=21 format=3 uid="uid://vjk38dv70v58"]
 
 [ext_resource type="Script" path="res://scenes/building/GoblinCamp.cs" id="1_at3gp"]
 [ext_resource type="PackedScene" uid="uid://1yhtftqdjv6i" path="res://scenes/component/BuildingComponent.tscn" id="1_m54i5"]
+[ext_resource type="AudioStream" uid="uid://neehmv3n0kpe" path="res://assets/audio/poof.wav" id="2_832b5"]
 [ext_resource type="PackedScene" uid="uid://biwjdkrgyfrgp" path="res://scenes/component/BuildingAnimatorComponent.tscn" id="2_cvphp"]
 [ext_resource type="Texture2D" uid="uid://7o187s2w340s" path="res://assets/buildings/wood_tower_red.png" id="3_co1u3"]
 [ext_resource type="Texture2D" uid="uid://cgsxw7chk0d6e" path="res://assets/buildings/wood_tower_destroyed.png" id="4_4lb64"]
@@ -115,6 +116,10 @@ buildingComponent = NodePath("BuildingComponent")
 fire = NodePath("BuildingAnimatorComponent/AnimatedSprite2D/Fire")
 animatedSprite2D = NodePath("BuildingAnimatorComponent/AnimatedSprite2D")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_832b5")
+bus = &"SFX"
+
 [node name="BuildingComponent" parent="." node_paths=PackedStringArray("buildingAnimatorComponent") instance=ExtResource("1_m54i5")]
 buildingResourcePath = "res://resources/building/goblin_camp.tres"
 buildingAnimatorComponent = NodePath("../BuildingAnimatorComponent")
@@ -135,4 +140,4 @@ visible = false
 position = Vector2(0, -80)
 sprite_frames = SubResource("SpriteFrames_m57jn")
 autoplay = "default"
-frame_progress = 0.978573
+frame_progress = 0.92948

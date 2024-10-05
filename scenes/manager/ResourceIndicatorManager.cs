@@ -13,12 +13,15 @@ public partial class ResourceIndicatorManager : Node
     [Export]
     private PackedScene resourceIndicatorScene;
 
+    private AudioStreamPlayer audioStreamPlayer;
+
     private HashSet<Vector2I> indicatedTiles = new();
     private readonly Dictionary<Vector2I, ResourceIndicator> tileToResourceIndicator = new();
 
     public override void _Ready()
     {
         gridManager.ResourceTilesUpdated += OnResourceTilesUpdated;
+        audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
     }
 
     private void UpdateIndicators(
@@ -26,6 +29,8 @@ public partial class ResourceIndicatorManager : Node
         IEnumerable<Vector2I> toRemoveTiles
     )
     {
+        if (newIndicatedTiles.Any())
+            audioStreamPlayer.Play();
         foreach (var newTile in newIndicatedTiles)
         {
             var indicator = resourceIndicatorScene.Instantiate<ResourceIndicator>();
