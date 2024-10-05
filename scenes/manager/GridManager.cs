@@ -185,6 +185,11 @@ public partial class GridManager : Node
         return (Vector2I)(worldPosition / 64).Floor();
     }
 
+    public HashSet<Vector2I> GetCollectedResourceTiles()
+    {
+        return collectedResourceTiles.ToHashSet();
+    }
+
     private bool WillBuildingDestructionCreateOrphanBuildings(
         BuildingComponent toDestroyBuildingComponent
     )
