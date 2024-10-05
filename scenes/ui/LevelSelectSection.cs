@@ -1,4 +1,5 @@
 using System;
+using Game.Autoload;
 using Game.Resources.Level;
 using Godot;
 
@@ -12,6 +13,7 @@ public partial class LevelSelectSection : PanelContainer
     private Button button;
     private Label resourceCountLabel;
     private Label levelNumberLabel;
+    private TextureRect completedIndicator;
     private int levelIndex;
 
     public override void _Ready()
@@ -19,6 +21,7 @@ public partial class LevelSelectSection : PanelContainer
         button = GetNode<Button>("%Button");
         resourceCountLabel = GetNode<Label>("%ResourceCountLabel");
         levelNumberLabel = GetNode<Label>("%LevelNumberLabel");
+        completedIndicator = GetNode<TextureRect>("%CompletedIndicator");
 
         button.Pressed += OnButtonPressed;
     }
@@ -31,6 +34,7 @@ public partial class LevelSelectSection : PanelContainer
     public void SetLevelDefinition(LevelDefinitionResource levelDefinitionResource)
     {
         resourceCountLabel.Text = levelDefinitionResource.StartingResourceCount.ToString();
+        completedIndicator.Visible = SaveManager.IsLevelCompleted(levelDefinitionResource.Id);
     }
 
     public void SetLevelIndex(int index)
