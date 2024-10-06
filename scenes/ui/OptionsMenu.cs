@@ -60,8 +60,6 @@ public partial class OptionsMenu : CanvasLayer
         doneButton.Pressed += () => EmitSignal(SignalName.DoneButtonPressed);
     }
 
-    public override void _Process(double delta) { }
-
     private void UpdateDisplay()
     {
         sfxLabel.Text = Mathf.Round(OptionsHelper.GetBusVolumePercent(SFX_BUS) * 10).ToString();
