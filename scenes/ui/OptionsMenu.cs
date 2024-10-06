@@ -7,6 +7,10 @@ public partial class OptionsMenu : CanvasLayer
 {
     private const string SFX_BUS = "SFX";
     private const string MUSIC_BUS = "Music";
+
+    [Signal]
+    public delegate void DoneButtonPressedEventHandler();
+
     private Button sfxUpButton;
     private Button sfxDownButton;
     private Label sfxLabel;
@@ -53,6 +57,7 @@ public partial class OptionsMenu : CanvasLayer
             OptionsHelper.ToggleWindowMode();
             UpdateDisplay();
         };
+        doneButton.Pressed += () => EmitSignal(SignalName.DoneButtonPressed);
     }
 
     public override void _Process(double delta) { }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=4 uid="uid://dbjrd3oae4ryl"]
+[gd_scene load_steps=10 format=4 uid="uid://dbjrd3oae4ryl"]
 
 [ext_resource type="Script" path="res://scenes/ui/MainMenu.cs" id="1_kewfy"]
 [ext_resource type="TileSet" uid="uid://txcxlotyc02t" path="res://resources/tiles.tres" id="2_jtmjy"]
 [ext_resource type="PackedScene" uid="uid://b6h7hpyfpfbrb" path="res://scenes/ui/LevelSelectScreen.tscn" id="2_k74r2"]
+[ext_resource type="PackedScene" uid="uid://b2pwlhr1ygp6j" path="res://scenes/ui/OptionsMenu.tscn" id="2_qipeb"]
 [ext_resource type="PackedScene" uid="uid://b0e7h08776eb4" path="res://scenes/building/Base.tscn" id="3_cic7p"]
 [ext_resource type="PackedScene" uid="uid://drych0iucvapa" path="res://scenes/level/util/ElevationLayer.tscn" id="3_kdwle"]
 [ext_resource type="PackedScene" uid="uid://b34dd1sui3c1t" path="res://scenes/building/Village.tscn" id="4_m0lov"]
@@ -11,6 +12,7 @@
 
 [node name="MainMenu" type="Node"]
 script = ExtResource("1_kewfy")
+optionsScene = ExtResource("2_qipeb")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
