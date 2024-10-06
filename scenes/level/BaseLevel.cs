@@ -54,6 +54,7 @@ public partial class BaseLevel : Node
     {
         if (@event.IsActionPressed(PAUSE_ACTION))
         {
+            GetTree().Paused = true;
             var escapeMenu = escapeMenuScene.Instantiate<EscapeMenu>();
             AddChild(escapeMenu);
             GetViewport().SetInputAsHandled();

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b2pwlhr1ygp6j" path="res://scenes/ui/OptionsMenu.tscn" id="2_i1tjj"]
 
 [node name="EscapeMenu" type="CanvasLayer"]
+process_mode = 2
 layer = 2
 script = ExtResource("1_s4367")
 mainMenuScenePath = "res://scenes/ui/MainMenu.tscn"

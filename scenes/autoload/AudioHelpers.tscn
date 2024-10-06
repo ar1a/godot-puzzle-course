@@ -18,6 +18,7 @@ stream_2/stream = ExtResource("3_w66he")
 script = ExtResource("1_05jao")
 
 [node name="MusicAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 3
 stream = ExtResource("2_ba6vs")
 volume_db = -5.0
 autoplay = true
@@ -29,6 +30,7 @@ max_polyphony = 3
 bus = &"SFX"
 
 [node name="ClickAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 3
 stream = ExtResource("5_0muqb")
 bus = &"SFX"
 

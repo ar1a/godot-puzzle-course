@@ -27,8 +27,12 @@ public partial class EscapeMenu : CanvasLayer
 
         AudioHelpers.RegisterButtons(new Button[] { quitButton, resumeButton, optionsButton });
 
-        quitButton.Pressed += () => GetTree().ChangeSceneToFile(mainMenuScenePath);
-        resumeButton.Pressed += QueueFree;
+        quitButton.Pressed += () =>
+        {
+            GetTree().Paused = false;
+            GetTree().ChangeSceneToFile(mainMenuScenePath);
+        };
+        resumeButton.Pressed += CloseMenu;
         optionsButton.Pressed += OnOptionsButtonPressed;
     }
 
@@ -36,9 +40,15 @@ public partial class EscapeMenu : CanvasLayer
     {
         if (@event.IsActionPressed(PAUSE_ACTION))
         {
-            QueueFree();
+            CloseMenu();
             GetViewport().SetInputAsHandled();
         }
+    }
+
+    private void CloseMenu()
+    {
+        GetTree().Paused = false;
+        QueueFree();
     }
 
     private void OnOptionsButtonPressed()
